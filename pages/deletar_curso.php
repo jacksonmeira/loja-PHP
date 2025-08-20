@@ -1,0 +1,21 @@
+<?php
+
+include('lib/conexao.php');
+
+include('lib/protect.php');
+protect(1);
+
+if (!isset($_SESSION))
+    session_start();
+
+
+$id = intval($_GET['id']);
+
+$mysql_query = $mysqli->query("SELECT imagem FROM cursos WHERE id = '$id'") or die($mysqli->error);
+$curso = $mysql_query->fetch_assoc();
+
+if (unlink($curso['imagem'])) {
+    $mysqli->query("DELETE FROM cursos WHERE id = '$id'") or die($mysqli->error);
+}
+
+die("<script>location.href=\"index.php?p=gerenciar_cursos\";</script>");
